@@ -2,12 +2,15 @@ import sqlite3
 import requests
 from bs4 import BeautifulSoup
 
-class city:
-    def __init__(self, name):
-        self.name = name
+class City:
+    def __init__(self):
+        self.name = None
+        self.url = None
         self.weather = None
-        self.temp = None
+        self.low_temp = None
+        self.high_temp = None
         self.wind = None
+        self.wind_speed = None
 
 url = 'https://tianqi.moji.com/weather/china'
 headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko)\
@@ -41,11 +44,26 @@ for item in prov_alphabet.find_all('a'):
     city_list[zh_name] = city_url
 #print(city_list)
 
-city = input('请输入城市：')
-while city not in city_list:
-    city = input('没有该城市，请重新输入:')
+city = City()
+city.name = input('请输入城市：')
+while city.name not in city_list:
+    city.name = input('没有该城市，请重新输入:')
     if city == '0':
         break
-city_url =city_list[city]
+city.url = city_list[city.name]
 #print(city_url)
 
+city_bs = BeautifulSoup(requests.get(city.url, headers = headers).content, 'html.parser')
+city_alphabet = city_bs.find(name = 'ul', attrs={"class":'days clearfix'})
+#print(city_alphabet.text)
+text = city_alphabet.text.split()
+city.weather = text[1].strip()
+city.low_temp = text[2].strip()
+city.high_temp = text[4].strip()
+city.wind = text[5].strip()
+city.wind_speed = text[6].strip()
+
+print('城市：', city.name)
+print('天气：', city.weather)
+print(f'温度：{city.low_temp} ~ {city.high_temp}')
+print(f'风速：{city.wind} {city.wind_speed}')
