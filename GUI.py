@@ -9,8 +9,8 @@ class WeatherApp(QMainWindow):
     def __init__(self):
         super().__init__()
         
-        self.setWindowTitle("城市天气预报")
-        self.setGeometry(100, 100, 500, 400)
+        self.setWindowTitle("全国天气查询")
+        self.setGeometry(500, 300, 400, 400)
         
         self.data = weather_data
         self.init_ui()
@@ -23,17 +23,15 @@ class WeatherApp(QMainWindow):
         main_layout = QVBoxLayout()
         central_widget.setLayout(main_layout)
         
-        # 标题
-        self.title_label = QLabel("城市天气预报查询")
+        self.title_label = QLabel("区域天气预报查询")
         self.title_label.setAlignment(Qt.AlignCenter)
         self.title_label.setStyleSheet("font-size: 18px; font-weight: bold;")
-        
-        # 省份选择
+        self.title_label.setFixedHeight(30)
+
         self.province_combo = QComboBox()
         self.province_combo.setPlaceholderText("请选择省份")
         self.province_combo.currentTextChanged.connect(self.on_province_changed)
         
-        # 城市选择
         self.city_combo = QComboBox()
         self.city_combo.setPlaceholderText("请先选择省份")
         self.city_combo.setEnabled(False)
@@ -48,12 +46,15 @@ class WeatherApp(QMainWindow):
         self.info_box.setFrameShape(QFrame.Box)
         self.info_box.setLineWidth(2)
         self.info_box.setStyleSheet("background-color: #f9f9f9;")
+        self.info_box.setFixedHeight(200)
+        self.info_box.setFixedWidth(400)
         
-        self.info_label = QLabel("请先选择省份和城市")
+        self.info_label = QLabel("请先选择省份和区域")
         self.info_label.setAlignment(Qt.AlignTop | Qt.AlignLeft)
         self.info_label.setWordWrap(True)
-        self.info_label.setStyleSheet("padding: 10px; font-size: 14px;")
-        
+        self.info_label.setStyleSheet("padding: 10px; font-size: 18px; text-align: center;")
+        self.info_label.setAlignment(Qt.AlignCenter)
+
         info_layout = QVBoxLayout()
         info_layout.addWidget(self.info_label)
         self.info_box.setLayout(info_layout)
@@ -64,7 +65,7 @@ class WeatherApp(QMainWindow):
         combo_layout = QHBoxLayout()
         combo_layout.addWidget(QLabel("省份:"))
         combo_layout.addWidget(self.province_combo)
-        combo_layout.addWidget(QLabel("城市:"))
+        combo_layout.addWidget(QLabel("区域:"))
         combo_layout.addWidget(self.city_combo)
         
         main_layout.addLayout(combo_layout)
@@ -100,17 +101,17 @@ class WeatherApp(QMainWindow):
         if cities:
             self.city_combo.addItems(cities)
             self.city_combo.setEnabled(True)
-            self.city_combo.setPlaceholderText("请选择城市")
+            self.city_combo.setPlaceholderText("请选择区域")
             self.query_btn.setEnabled(True)
         else:
-            self.city_combo.setPlaceholderText("无城市数据")
+            self.city_combo.setPlaceholderText("无区域数据")
             self.city_combo.setEnabled(False)
             self.query_btn.setEnabled(False)
     
     def query_weather(self):
         city = self.city_combo.currentText()
         if not city:
-            self.info_label.setText("请选择城市")
+            self.info_label.setText("请选择区域")
             return
         
         self.info_label.setText("正在获取天气数据...")
@@ -124,7 +125,7 @@ class WeatherApp(QMainWindow):
         info_text = (
             f"🏙️ {city}天气预报\n\n"
             f"天气: {weather_info.weather}\n"
-            f"温度: {weather_info.low_temp} ~ {weather_info.high_temp}\n"
+            f"温度: {weather_info.low_temp}/ {weather_info.high_temp}\n"
             f"风力: {weather_info.wind} {weather_info.wind_speed}\n"
         )
         
