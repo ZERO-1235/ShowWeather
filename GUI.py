@@ -123,7 +123,7 @@ class WeatherApp(QMainWindow):
         weather_info = self.data.get_weather(city)
         
         info_text = (
-            f"🏙️ {city}天气预报\n\n"
+            f"🏙️ {city}天气\n\n"
             f"天气: {weather_info.weather}\n"
             f"温度: {weather_info.low_temp}/ {weather_info.high_temp}\n"
             f"风力: {weather_info.wind} {weather_info.wind_speed}\n"
