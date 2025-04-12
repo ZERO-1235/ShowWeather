@@ -1,9 +1,6 @@
 # 天气查询软件报告
 
-### 李佳昊 PB22061305
-
 ```
-Github：https://github.com/ZERO-1235/ShowWeather.git
 视频：https://rec.ustc.edu.cn/share/bdbd7990-16ff-11f0-8ab9-b15d4b33ab23
 ```
 ## 一、软件功能
